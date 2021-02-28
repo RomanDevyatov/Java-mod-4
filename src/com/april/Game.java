@@ -6,11 +6,11 @@ public class Game {
     private int[][] mas;
     
     private int napr;
-    // 0 - left, 1 - up, 2 - right, 3 - down)
+    // 0 - left, 1 - up, 2 - right, 3 - down
     private int gX, gY;
     private int kol;
     
-    public int new_napr;
+    public int newNapr;
     
     private int dlina;
     
@@ -40,9 +40,17 @@ public class Game {
     	this.napr = anotherNapr;
     }
     
+    public int getNewNapr() {    	
+    	return newNapr;
+    }
+    
+    public void setNewNapr(int anotherNewNapr) {    	
+    	this.newNapr = anotherNewNapr;
+    }
+    
     private void povorot() {
-    	if (Math.abs(new_napr - napr) != 2) {
-    		napr = new_napr;
+    	if (Math.abs(newNapr - napr) != 2) {
+    		napr = newNapr;
     	}
     }
     
@@ -68,24 +76,18 @@ public class Game {
         
         napr = 0;        
         kol = 0;        
-        gX = gY = 15;
-        mas[15][15] = 1;
         
-//        mas[14][14] = 1;
-//        mas[14][15] = 2;
-//        mas[14][16] = 3;
-//        dlina = 3;
-//        gX = gY = 14;
+        mas[14][14] = 1;
+        mas[14][15] = 2;
+        mas[14][16] = 3;
+        dlina = 3;
+        gX = gY = 14;
         endg = false;
         
         makeNew();        
     }
     
-    public void peremGolova() {
-    	mas[gY][gX] = 0;
-    	
-    	//System.out.println("napr: " + napr);
-    	
+    public int peremGolova() {    	
     	if (napr == 0) {
     		if ((gX - 1) >= 0) {
     			gX--;
@@ -111,54 +113,14 @@ public class Game {
     			gY = 0;
     		}    		
     	}
-    	
-    	if (mas[gY][gX] == -1) {
-    		makeNew();
-    		kol += 10;
-    	}
-    	    	
-    	mas[gY][gX] = 1;
-    }
-
-    public int peremGolova_2() {    	
-    	if (napr == 0) {
-    		if ((gX - 1) >= 0) {
-    			gX--;
-    		} else {
-    			gX = 29;
-    		}
-    	} else if (napr == 1) {
-    		if ((gY - 1) >= 0) {
-    			gY--;
-    		} else {
-    			gY = 29;
-    		}    		
-    	} else if (napr == 2) {
-    		if ((gX + 1) <= 29) {
-    			gX++;
-    		} else {
-    			gX = 0;
-    		}    		
-    	} else if (napr == 3) {
-    		if ((gY + 1) <= 29) {
-    			gY++;
-    		} else {
-    			gY = 0;
-    		}    		
-    	}
-    	
-    	if (mas[gY][gX] == -1) {
-    		makeNew();
-    		kol += 10;
-    	}
-    	
+    	   	
     	int rez = 0;
     	if (mas[gY][gX] == -1) {
-    		rez = 1;
+    		rez = 1; // попали туда, где еда
     	} else if (mas[gY][gX] == 0) {
-    		rez = 2;
+    		rez = 2;// попали в пустое поле
     	} else if (mas[gY][gX] > 0) {
-    		rez = 3;
+    		rez = 3;// попали в туловище змейки
     	}
     	
     	mas[gY][gX] = -2;
@@ -167,37 +129,36 @@ public class Game {
     }
     
     public void perem() {
-    	int flag = peremGolova_2();
+    	int flag = peremGolova();
     	
     	if (flag == 3) {
     		endg = true;
-    	}
-    	
-    	for (int i = 0; i < 30; i++) {
-    		for (int k = 0; k < 30; k++) {
-    			if (mas[i][k] > 0) {
-    				mas[i][k]++;
-    			} else if (mas[i][k] == -2) {
-    				mas[i][k] = 1;
-    			}
+    	} else {    	
+    		for (int i = 0; i < 30; i++) {
+    			for (int k = 0; k < 30; k++) {
+    				if (mas[i][k] > 0) {
+    					mas[i][k]++; //увеличили каждое поле змейки на 1
+    				} else if (mas[i][k] == -2) { // -2 -новая координата головы змейки
+    					mas[i][k] = 1; // помещаем голову
+    				}
     			
-    			if (flag != 1) {
-    				if (mas[i][k] == (dlina +1)) {
-    					mas[i][k] = 0;
+    				if (flag != 1) {
+    					if (mas[i][k] == (dlina + 1)) {
+    						mas[i][k] = 0;
+    					}
     				}
     			}
     		}
-    	}
     	
-    	if (flag == 1) {
-    		dlina++;
-    		makeNew();
-    		kol += 10;
+    		if (flag == 1) {
+    			dlina++;
+    			makeNew();
+    			kol += 10;
+    		}
+    		
+    		povorot();
     	}
     }
-
-
-
 
 
 }
