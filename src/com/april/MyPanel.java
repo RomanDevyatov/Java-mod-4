@@ -36,13 +36,13 @@ public class MyPanel extends JPanel {
 			int key = e.getKeyCode();
 			
 			if (key == KeyEvent.VK_LEFT) {
-				game.setNapr(0);
+				game.setNewNapr(0);
 			} else if (key == KeyEvent.VK_UP) {
-				game.setNapr(1);
+				game.setNewNapr(1);
 			} else if (key == KeyEvent.VK_RIGHT) {
-				game.setNapr(2);
+				game.setNewNapr(2);
 			} else if (key == KeyEvent.VK_DOWN) {
-				game.setNapr(3);
+				game.setNewNapr(3);
 			}			
 		}
 
@@ -85,7 +85,9 @@ public class MyPanel extends JPanel {
         	@Override
             public void actionPerformed(ActionEvent e) {                
                 if (game.getEndg() == false) {
-                	game.peremGolova();
+                	System.out.println("Направление перед поворотом: " + game.getNapr());
+                	game.perem();
+                	System.out.println("Направление после поворота: " + game.getNapr());
                 }
         		lb.setText("Счёт: " + game.getKol());
             }
@@ -139,10 +141,10 @@ public class MyPanel extends JPanel {
                     if (game.getMasByXY(k, i) == 1) {
                         gr.drawImage(golova, 10 + k * 20, 10 + i * 20, 20, 20, null);
                     } else if (game.getMasByXY(k, i) == -1) {
-                        gr.drawImage(ob, 10 + k * 20, 10 + i * 20, 20, 20, null);}
-//                    } else if (game.getMasByXY(k, i) >= 2) {
-//                    	gr.drawImage(telo, 10 + k * 20, 10 + i * 20, 20, 20, null);
-//                    }
+                        gr.drawImage(ob, 10 + k * 20, 10 + i * 20, 20, 20, null);
+                    } else if (game.getMasByXY(k, i) >= 2) {
+                    	gr.drawImage(telo, 10 + k * 20, 10 + i * 20, 20, 20, null);
+                    }
                 }
             }
         }
@@ -153,17 +155,12 @@ public class MyPanel extends JPanel {
             gr.drawLine(10, 10 + i * 20, 610, 10 + i * 20);
         }
         
+        if (game.getEndg() == true) {
+        	gr.drawImage(endg, 250, 200, 200, 100, null);
+        }
         //i = 0: gr.drawLine(10, 10, 10, 610);
         //i = 1: gr.drawLine(30, 10, 30, 610);
         //i = 2: gr.drawLine(50, 10, 50, 610);
-        
-//        if (game.getEndg() == true) {
-//        	gr.drawImage(endg, 250, 200, 200, 100, null);
-//        }
-
-        
-
-
     }
 
 
